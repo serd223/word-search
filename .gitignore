@@ -1,0 +1,4 @@
+/target
+/src/archive
+Cargo.lock
+*.exe
