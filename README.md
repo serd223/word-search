@@ -1,4 +1,5 @@
 ## Features
+- Can search through huge word lists.
 - Can change word source file during runtime.
 - Can show additional info about suggestions.
 
