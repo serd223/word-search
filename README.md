@@ -1,4 +1,4 @@
-# Features
+## Features
 - Can change word source file during runtime.
 - Can show additional info about suggestions.
 
