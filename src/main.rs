@@ -72,7 +72,8 @@ fn main() {
     
     let mut current_source = WORD_FILE_PATH.to_string();
     let mut word_list_str_buf = String::new();
-    read_to(WORD_FILE_PATH, &mut word_list_str_buf);
+    read_to(WORD_FILE_PATH, &mut word_list_str_buf).expect("Couldn't open file");
+    word_list_str_buf = word_list_str_buf.to_lowercase();
 
     loop {
         print!("Enter text to search: ");
@@ -105,8 +106,15 @@ fn main() {
             let mut full_path = String::from("res/");
             full_path.push_str(file_path);
             current_source = full_path.clone();
+            let mut temp_buf = String::new();
+
+            match read_to(full_path.as_str(), &mut temp_buf) {
+                Err(_) => {println!("{} does not exist.", full_path); continue;}
+                _ => ()
+            };
+
             word_list_str_buf.clear();
-            read_to(full_path.as_str(), &mut word_list_str_buf);
+            word_list_str_buf = temp_buf;
             word_list_str_buf = word_list_str_buf.to_lowercase();
             continue;
         }
@@ -151,8 +159,8 @@ fn main() {
             .filter(|s| {
                 let len_diff = (input_len as i32 - s.chars().count() as i32).abs();
                 !(
-                    len_diff > MAX_LEN_DIFF ||
-                    !s.starts_with(&word_prefix) 
+                    len_diff > MAX_LEN_DIFF 
+                    || !s.starts_with(&word_prefix) 
                 )
             })
             .map(|s| Word::from_str(s))
@@ -174,7 +182,7 @@ fn main() {
                     }
                 })
                 .sum::<f32>()
-                + len_diff as f32 / input_len as f32 / 25.
+                + (len_diff as f32 / input_len as f32) / 100.
                 + different_char_count(input, w.str_repr) as f32 / input_len as f32 * 1.35;
             
             if total <= MAX_WEIGHT_DIFF {
