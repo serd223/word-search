@@ -18,7 +18,7 @@ impl fmt::Display for Word<'_> {
 impl<'a> Word<'a> {
     pub fn from_str(s: &'a str) -> Self {
         let mut letters = HashMap::new();
-        let one_div_len = 1. / s.len() as f32;
+        let one_div_len = 1. / s.chars().count() as f32;
         for c in s.chars() {
             if c == ' ' {
                 continue;
